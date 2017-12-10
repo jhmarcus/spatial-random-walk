@@ -193,6 +193,7 @@ class SteppingStone(object):
         # figure 1
         ax1.hist(self.d_geo[tril_idx], bins=bins)
         ax1.set_xlabel('Geographic Distance')
+        ax1.set_ylabel('Count')
 
         # figure 2
         ax2.hist(self.d_res[tril_idx], bins=bins)
