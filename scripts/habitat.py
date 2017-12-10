@@ -49,7 +49,7 @@ class Habitat(object):
         '''
         raise NotImplementedError('mig_rate_func is not implemented')
 
-    def plot_graph(self, node_size, edge_width_mult):
+    def plot_graph(self, node_size, edge_width_mult, arrows=False):
         '''
         Plot the habitat as weight directed graph
 
@@ -63,8 +63,8 @@ class Habitat(object):
         edges = [(i,j) for i,j in self.g.edges() if self.g[i][j]['m'] != 0.0]
         nx.draw(self.g, pos=self.pos_dict, node_size=node_size,
                 node_color=(self.s[:,0]**2 + (np.sqrt(self.d) / 2) * self.s[:,1]),
-                cmap=cm.viridis, arrows=True, edgelist=edges,
-                width=edge_width_mult*np.array(weights))
+                cmap=cm.viridis, arrows=arrows, edgelist=edges,
+                width=edge_width_mult*np.array(weights), edge_color='gray')
 
     def plot_mig_mat(self):
         '''

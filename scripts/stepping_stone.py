@@ -42,6 +42,7 @@ class SteppingStone(object):
         self.mu = mu
         self.n_samp = n_samp
         self.n_rep = n_rep
+        self.eps = eps
 
         if os.path.exists(sim_path):
             with open(sim_path, 'rb') as geno:
@@ -112,12 +113,12 @@ class SteppingStone(object):
         plt.xlabel('Derived Allele Frequency')
         plt.ylabel('log(Count)')
 
-    def filter_rare_var(self, eps):
+    def filter_rare_var(self):
         '''
         Filter out rare variants
         '''
         daf = np.sum(self.y, axis=0) / self.n
-        idx = np.where((daf >= eps) & (daf <= (1. - eps)))[0]
+        idx = np.where((daf >= self.eps) & (daf <= (1. - self.eps)))[0]
         self.y = self.y[:,idx]
         self.n, self.p = self.y.shape
 
@@ -157,6 +158,7 @@ class SteppingStone(object):
         f, (ax1, ax2, ax3) = plt.subplots(1, 3, sharey=True, figsize=figsize)
 
         # figure 1
+        print('geo r2 = {}'.format(np.corrcoef(self.d_geo[tril_idx], self.d_gen[tril_idx])[0, 1]))
         fit = np.polyfit(self.d_geo[tril_idx], self.d_gen[tril_idx], 1)
         ax1.scatter(self.d_geo[tril_idx], self.d_gen[tril_idx], marker='.', alpha=.5)
         ax1.plot(self.d_geo[tril_idx], fit[0] * self.d_geo[tril_idx] + fit[1], c='orange')
@@ -164,12 +166,14 @@ class SteppingStone(object):
         ax1.set_ylabel('Genetic Distance')
 
         # figure 2
+        print('res r2 = {}'.format(np.corrcoef(self.d_res[tril_idx], self.d_gen[tril_idx])[0, 1]))
         fit = np.polyfit(self.d_res[tril_idx], self.d_gen[tril_idx], 1)
         ax2.plot(self.d_res[tril_idx], fit[0] * self.d_res[tril_idx] + fit[1], c='orange')
         ax2.scatter(self.d_res[tril_idx], self.d_gen[tril_idx], alpha=.5, marker='.')
         ax2.set_xlabel('Resistence Distance')
 
         # figure 3
+        print('rw r2 = {}'.format(np.corrcoef(self.d_rw[tril_idx], self.d_gen[tril_idx])[0, 1]))
         fit = np.polyfit(self.d_rw[tril_idx], self.d_gen[tril_idx], 1)
         ax3.plot(self.d_rw[tril_idx], fit[0] * self.d_rw[tril_idx] + fit[1], c='orange')
         ax3.scatter(self.d_rw[tril_idx], self.d_gen[tril_idx], alpha=.5, marker='.')
