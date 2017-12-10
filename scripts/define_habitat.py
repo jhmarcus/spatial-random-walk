@@ -39,7 +39,6 @@ def gen_lattice(n, p):
 
 def quadratic_barrier_weights(g, s, m_min, m_max):
     '''
-
     Args:
         g: nx.graph
             regular lattice
@@ -58,6 +57,25 @@ def quadratic_barrier_weights(g, s, m_min, m_max):
 
     return(g)
 
+def asymetric_uniform_migration(g, m_unf):
+    '''
+    Args:
+        g: nx.graph
+            regular lattice
+        m_unf: float
+            uniform migration rate
+    Returns:
+        g: nx.graph
+            regular lattice with assigned weights
+    '''
+    for i,j in g.edges():
+        print(i,j)
+        if i < j:
+            g[i][j]['m'] = m_unf
+        else:
+            g[i][j]['m'] = 0.0
+
+    return(g)
 
 
 
