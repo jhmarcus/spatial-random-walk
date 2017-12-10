@@ -179,6 +179,29 @@ class SteppingStone(object):
         ax3.scatter(self.d_rw[tril_idx], self.d_gen[tril_idx], alpha=.5, marker='.')
         ax3.set_xlabel('Random Walk Distance')
 
+    def plot_dist_hist(self, bins=20, figsize=(14,4)):
+        '''
+        Plot subplots of x distance vs genetic distance
+
+        Args:
+            figsize: tuple
+                total figure size (width, height)
+        '''
+        tril_idx = np.tril_indices(self.n, -1)
+        f, (ax1, ax2, ax3) = plt.subplots(1, 3, sharey=True, figsize=figsize)
+
+        # figure 1
+        ax1.hist(self.d_geo[tril_idx], bins=bins)
+        ax1.set_xlabel('Geographic Distance')
+
+        # figure 2
+        ax2.hist(self.d_res[tril_idx], bins=bins)
+        ax2.set_xlabel('Resistence Distance')
+
+        # figure 3
+        ax3.hist(self.d_rw[tril_idx], bins=bins)
+        ax3.set_xlabel('Random Walk Distance')
+
 def node_to_obs_mat(x, n, v):
     '''
     Converts node level array to data level array
