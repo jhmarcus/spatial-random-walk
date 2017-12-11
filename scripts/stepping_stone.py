@@ -122,19 +122,29 @@ class SteppingStone(object):
         self.y = self.y[:,idx]
         self.n, self.p = self.y.shape
 
-    def plot_pca(self):
+    def plot_pca(self, figsize=(12, 6)):
         '''
         Run pca on normalized genotype data
         '''
         mu = np.mean(self.y, axis=0)
         std = np.std(self.y, axis=0)
         z = (self.y - mu) / std
-        pca = PCA(n_components=2)
+        pca = PCA(n_components=50)
         pca.fit(z.T)
         pcs = pca.components_.T
-        plt.scatter(pcs[:,0], pcs[:,1], c=self.s[:,0]**2 + (np.sqrt(self.h.d) / 2) * self.s[:,1], cmap=cm.viridis)
-        plt.xlabel('PC1')
-        plt.ylabel('PC2')
+        pves = pca.explained_variance_ratio_
+
+        f, (ax1, ax2) = plt.subplots(1, 2, sharey=False, figsize=figsize)
+
+        # figure 1
+        ax1.scatter(pcs[:,0], pcs[:,1], c=self.s[:,0]**2 + (np.sqrt(self.h.d) / 2) * self.s[:,1], cmap=cm.viridis)
+        ax1.set_xlabel('PC1 ({})'.format(np.round(pves[0], 4)))
+        ax1.set_ylabel('PC2 ({})'.format(np.round(pves[1], 4)))
+
+        # figure 2
+        ax2.scatter(np.arange(pves.shape[0]), pves)
+        ax2.set_xlabel('PC')
+        ax2.set_ylabel('PVE')
 
     def compute_distances(self):
         '''
