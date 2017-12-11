@@ -8,11 +8,11 @@ from matplotlib import cm
 
 
 class Habitat(object):
-    '''Habitat class'''
+    '''Class for defining the habitat which is a graph'''
 
     def __init__(self, n, p):
         '''
-        Class for defining the habitat which is a graph
+        Intialize habitat
 
         Args:
             n: int
@@ -75,6 +75,8 @@ class Habitat(object):
 
     def compute_graph_laplacian(self):
         '''
+        Computes the graph laplacian using the edge weights
+        L = D - M
         '''
         d = np.diag(self.m.sum(axis=1))
         self.l = d - self.m
@@ -82,6 +84,9 @@ class Habitat(object):
 
     def compute_distances(self):
         '''
+        Computes the resistence distance and
+        the random walk distance using the
+        graph laplacian
         '''
         # resistence distance
         l_inv = pinv(self.l)
@@ -93,6 +98,11 @@ class Habitat(object):
 
     def plot_lapl(self, l):
         '''
+        Plots a heatmap of the graph laplacian
+
+        Args:
+            l: np.array
+                n x n graph laplacian
         '''
         plt.imshow(l, cmap='seismic', norm=mpl.colors.Normalize(vmin=-np.max(l), vmax=np.max(l)))
         plt.colorbar()

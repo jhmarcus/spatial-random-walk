@@ -13,13 +13,15 @@ import os
 
 
 class SteppingStone(object):
-    '''SteppingStone class'''
+    '''
+    Class for simulating genotypes under the stepping stone model
+    and computing and visualizing a variety of summeries of the data
+    particularly related to predictors of genetic distance
+    '''
 
     def __init__(self, h, sim_path, length=1, mu=1e-3, n_samp=10, n_rep=1e3, eps=.05):
         '''
-        Class for simulating genotypes under the stepping stone model
-        and computing and visualizing a variety of summeries of the data
-        particularly related to predictors of genetic distance
+        Intialize stepping stone simulation
 
         Args:
             h: Habitat
