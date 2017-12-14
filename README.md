@@ -7,3 +7,9 @@ An exploration of spatial-temporal random walks for modeling genetic distances
 Here I explore how well various distances based on random walks on graphs predict genetic distances simulated under the coalescent.
 
 * [Isolation by spatial random walks](https://github.com/jhmarcus/spatial-random-walk/blob/master/notebooks/isolation_by_srw.ipynb)
+
+Here I explore fast methods for inverting the graph laplacian implemented in `julia`
+
+* [Isolation by spatial random walks](https://github.com/jhmarcus/spatial-random-walk/blob/master/notebooks/fast_sparse_wishart.ipynb)
+
+Here I explore the relationship between laplacian smoothing and the spatial-random-walk developed in [Hanks 2016](https://github.com/jhmarcus/spatial-random-walk/blob/master/ref/hanks_2016.pdf)
