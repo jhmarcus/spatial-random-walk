@@ -1,6 +1,6 @@
 import networkx as nx
 import numpy as np
-from scipy.linalg import pinv
+from scipy.linalg import pinv, pinvh
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -89,11 +89,13 @@ class Habitat(object):
         graph laplacian
         '''
         # resistence distance
-        l_inv = pinv(self.l)
+        #l_inv = pinv(self.l)
+        l_inv = eig_inv(self.l)
         self.d_res = cov_to_dist(l_inv)
 
         # random walk disatnce
-        llt_inv = pinv(self.llt)
+        #llt_inv = pinv(self.llt)
+        llt_inv = eig_inv(self.llt)
         self.d_rw = cov_to_dist(llt_inv)
 
     def plot_lapl(self, l):
@@ -125,3 +127,11 @@ def cov_to_dist(sigma):
 
     return(d)
 
+def eig_inv(a):
+    '''
+    '''
+    #lamb, u = np.linalg.eigh(a)
+    #d_inv = np.diag(1. / lamb)
+    #a_inv = u.T @ (d_inv @ u)
+
+    return(pinvh(a, cond=1e-15))
