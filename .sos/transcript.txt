@@ -1,0 +1,20 @@
+:
+    rm -f docs/setup.html docs/license.html docs/notes.html docs/index.html docs/analysis/first-glance.html docs/analysis/seasonal-trends.html docs/analysis/station-map.html docs/analysis/time-of-day-trends.html docs/js/docs.js docs/index.tpl docs/analysis.tpl docs/setup.tpl docs/license.tpl docs/notes.tpl
+:
+    yes | cp -rf jnbinder-master/docs ./
+    cp jnbinder-master/config.yml config.default.yml
+    rm -rf jnbinder-master*
+    
+    
+:
+    rm -f analysis/_index.ipynb setup/_index.ipynb license/_index.ipynb notes/_index.ipynb
+    
+:
+    yes | cp -rf jnbinder-master/docs ./
+    cp jnbinder-master/config.yml config.default.yml
+    rm -rf jnbinder-master*
+    
+    
+:
+    rm -f analysis/_index.ipynb setup/_index.ipynb license/_index.ipynb notes/_index.ipynb
+    

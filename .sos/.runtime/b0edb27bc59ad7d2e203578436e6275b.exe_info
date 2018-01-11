@@ -1,0 +1,98 @@
+d40656cdfd62b4a4d2a1f6efcc1221ef
+# input
+# output
+sos_variable("generated_files")	a452faeb4ba042d05a31f3e9424b9e8a
+sos_variable("index_files")	18f3935657c90b47e177d5f9142eb608
+sos_variable("binders")	ea281fd4bae7a62981c99eabfa616c4c
+sos_variable("pipeline_files")	ae15f6584155708739aebc3893dc95e8
+sos_variable("conf")	3a8e4c06e471595f6eb262bb9b5582d9
+sos_variable("notebook_files")	6c49a47f5a0342fc5d32d629faf6aa58
+# dependent
+# init context
+# end context
+DEFAULT_CONF={'__about_commit__':'https://stephenslab.github.io/ipynb-website/notes.html#Note-about-commit-ids', '__version__':'0.9.2', 'add_commit_info':True, 'disqus':None, 'exclude_file':[], 'font':'Droid Sans', 'footer':'&copy 2016-2017 Gao Wang at Stephens Lab, University of Chicago', 'hide_navbar':[], 'homepage':'Overview.ipynb', 'homepage_label':'Overview', 'include_dir':[], 'long_autoindex':True, 'name':'A Pet Project', 'notebook_toc':True, 'post_release_actions':None, 'release_message':None, 'repo':'http://github.com/vatlab/jnbinder', 'report_style':False, 'reverse_autoindex':[], 'source_label':'<span class="fa fa-github"></span>', 'theme':'cosmo'}
+binders=['analysis', 'setup', 'license', 'notes']
+conf={'__about_commit__':'https://stephenslab.github.io/ipynb-website/notes.html#Note-about-commit-ids', '__version__':'0.9.2', 'add_commit_info':True, 'disqus':None, 'exclude_file':[], 'font':None, 'footer':'&copy; 2017 Peter Carbonetto &amp; Gao Wang', 'hide_navbar':['analysis'], 'homepage':'analysis/index.ipynb', 'homepage_label':'Overview', 'include_dir':['analysis', 'setup', 'license', 'notes'], 'jt_theme':'readable', 'long_autoindex':True, 'name':'Divvy data exploration project', 'notebook_toc':False, 'post_release_actions':None, 'release_message':None, 'repo':'http://github.com/stephenslab/ipynb-website', 'report_style':False, 'reverse_autoindex':[], 'source_label':'source', 'theme':'readable', 'user_name':'josephmarcus'}
+generated_files=['docs/setup.html', 'docs/license.html', 'docs/notes.html', 'docs/index.html', 'docs/analysis/first-glance.html', 'docs/analysis/seasonal-trends.html', 'docs/analysis/station-map.html', 'docs/analysis/time-of-day-trends.html', 'docs/js/docs.js', 'docs/index.tpl', 'docs/analysis.tpl', 'docs/setup.tpl', 'docs/license.tpl', 'docs/notes.tpl']
+index_files=['setup/index.ipynb', 'license/index.ipynb', 'notes/index.ipynb']
+k='reverse_autoindex'
+load_config_files:=b'gANjc29zLnV0aWxzCmxvYWRfY29uZmlnX2ZpbGVzCnEALg=='
+notebook_files=['analysis/first-glance.ipynb', 'analysis/seasonal-trends.ipynb', 'analysis/station-map.ipynb', 'analysis/time-of-day-trends.ipynb']
+pipeline_files=[]
+# step process
+
+DEFAULT_CONF = { 
+ '__version__' : '0.9.2' , 
+ '__about_commit__' : 'https://stephenslab.github.io/ipynb-website/notes.html#Note-about-commit-ids' , 
+ 'name' : 'A Pet Project' , 
+ 'repo' : 'http://github.com/vatlab/jnbinder' , 
+ 'footer' : "&copy 2016-2017 Gao Wang at Stephens Lab, University of Chicago" , 
+ 'include_dir' : [ ] , 
+ 'exclude_file' : [ ] , 
+ 'hide_navbar' : [ ] , 
+ 'disqus' : None , 
+ 'report_style' : False , 
+ 'release_message' : None , 
+ 'post_release_actions' : None , 
+ 'homepage_label' : "Overview" , 
+ 'source_label' : '<span class="fa fa-github"></span>' , 
+ 'theme' : 'cosmo' , 
+ 'homepage' : 'Overview.ipynb' , 
+ 'font' : "Droid Sans" , 
+ 'notebook_toc' : True , 
+ 'add_commit_info' : True , 
+ 'long_autoindex' : True , 
+ 'reverse_autoindex' : [ ] 
+ } 
+ 
+ from sos . utils import load_config_files 
+ conf = load_config_files ( 'config.yml' ) 
+ conf . update ( { k : v for k , v in DEFAULT_CONF . items ( ) if k not in conf } ) 
+ conf [ 'jt_theme' ] = conf [ 'theme' ] if os . path . isfile ( f"docs/css/{conf['theme']}.css" ) else None 
+ for k in [ 'include_dir' , 'hide_navbar' , 'exclude_file' , 'reverse_autoindex' ] : 
+      conf [ k ] = [ os . path . normpath ( x ) for x in conf [ k ] ] 
+  binders = [ x for x in conf [ 'include_dir' ] if os . path . isdir ( x ) ] 
+ notebook_files = sum ( [ [ y for y in glob . glob ( f"{x}/*.ipynb" ) if y not in [ f"{x}/index.ipynb" , f"{x}/_index.ipynb" , conf [ 'homepage' ] ] + conf [ 'exclude_file' ] ] for x in binders ] , [ ] ) 
+ index_files = [ f'{x}/index.ipynb' if os . path . isfile ( f'{x}/index.ipynb' ) else f'{x}/_index.ipynb' for x in binders if x not in conf [ 'hide_navbar' ] ] 
+ pipeline_files = sum ( [ [ y for y in glob . glob ( f"{x}/*.sos" ) if y not in conf [ 'exclude_file' ] ] for x in binders ] , [ ] ) 
+ generated_files = [ f'docs/{x}.html' for x in binders if x not in conf [ 'hide_navbar' ] ] + [ 'docs/index.html' ] + [ 'docs/' + x . replace ( '.ipynb' , '.html' ) for x in notebook_files ] + [ 'docs/' + x . replace ( '.sos' , '.pipeline.html' ) for x in pipeline_files ] + [ 'docs/js/docs.js' , 'docs/index.tpl' ] + [ f"docs/{x}.tpl" for x in binders ] 
+ 
+ # step process
+
+DEFAULT_CONF = { 
+ '__version__' : '0.9.2' , 
+ '__about_commit__' : 'https://stephenslab.github.io/ipynb-website/notes.html#Note-about-commit-ids' , 
+ 'name' : 'A Pet Project' , 
+ 'repo' : 'http://github.com/vatlab/jnbinder' , 
+ 'footer' : "&copy 2016-2017 Gao Wang at Stephens Lab, University of Chicago" , 
+ 'include_dir' : [ ] , 
+ 'exclude_file' : [ ] , 
+ 'hide_navbar' : [ ] , 
+ 'disqus' : None , 
+ 'report_style' : False , 
+ 'release_message' : None , 
+ 'post_release_actions' : None , 
+ 'homepage_label' : "Overview" , 
+ 'source_label' : '<span class="fa fa-github"></span>' , 
+ 'theme' : 'cosmo' , 
+ 'homepage' : 'Overview.ipynb' , 
+ 'font' : "Droid Sans" , 
+ 'notebook_toc' : True , 
+ 'add_commit_info' : True , 
+ 'long_autoindex' : True , 
+ 'reverse_autoindex' : [ ] 
+ } 
+ 
+ from sos . utils import load_config_files 
+ conf = load_config_files ( 'config.yml' ) 
+ conf . update ( { k : v for k , v in DEFAULT_CONF . items ( ) if k not in conf } ) 
+ conf [ 'jt_theme' ] = conf [ 'theme' ] if os . path . isfile ( f"docs/css/{conf['theme']}.css" ) else None 
+ for k in [ 'include_dir' , 'hide_navbar' , 'exclude_file' , 'reverse_autoindex' ] : 
+      conf [ k ] = [ os . path . normpath ( x ) for x in conf [ k ] ] 
+  binders = [ x for x in conf [ 'include_dir' ] if os . path . isdir ( x ) ] 
+ notebook_files = sum ( [ [ y for y in glob . glob ( f"{x}/*.ipynb" ) if y not in [ f"{x}/index.ipynb" , f"{x}/_index.ipynb" , conf [ 'homepage' ] ] + conf [ 'exclude_file' ] ] for x in binders ] , [ ] ) 
+ index_files = [ f'{x}/index.ipynb' if os . path . isfile ( f'{x}/index.ipynb' ) else f'{x}/_index.ipynb' for x in binders if x not in conf [ 'hide_navbar' ] ] 
+ pipeline_files = sum ( [ [ y for y in glob . glob ( f"{x}/*.sos" ) if y not in conf [ 'exclude_file' ] ] for x in binders ] , [ ] ) 
+ generated_files = [ f'docs/{x}.html' for x in binders if x not in conf [ 'hide_navbar' ] ] + [ 'docs/index.html' ] + [ 'docs/' + x . replace ( '.ipynb' , '.html' ) for x in notebook_files ] + [ 'docs/' + x . replace ( '.sos' , '.pipeline.html' ) for x in pipeline_files ] + [ 'docs/js/docs.js' , 'docs/index.tpl' ] + [ f"docs/{x}.tpl" for x in binders ] 
+ 
+ 

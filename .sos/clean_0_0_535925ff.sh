@@ -1,0 +1,1 @@
+rm -f docs/setup.html docs/license.html docs/notes.html docs/index.html docs/analysis/first-glance.html docs/analysis/seasonal-trends.html docs/analysis/station-map.html docs/analysis/time-of-day-trends.html docs/js/docs.js docs/index.tpl docs/analysis.tpl docs/setup.tpl docs/license.tpl docs/notes.tpl
