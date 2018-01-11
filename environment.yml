@@ -1,4 +1,3 @@
-name: sprw
 channels:
   - bioconda
   - r
