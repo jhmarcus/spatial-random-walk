@@ -211,8 +211,8 @@ class GenotypeSimulator(object):
         fit = np.polyfit(d_x_tril, d_y_tril, 1)
         plt.scatter(d_x_tril, d_y_tril, marker='.', alpha=.5)
         plt.plot(d_x_tril, fit[0] * d_x_tril + fit[1], c='orange')
-        #plt.set_xlabel(lab_x)
-        #plt.set_ylabel(lab_y)
+        plt.xlabel(lab_x)
+        plt.ylabel(lab_y)
 
     def node_to_obs_mat(self, x, n, v):
         """Converts node level array to data level array

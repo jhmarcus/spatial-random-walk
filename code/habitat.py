@@ -219,7 +219,6 @@ class Circle(Habitat):
     d: int
         number of node (demes)
 
-
     Attributes
     ----------
     g : nx directed graph
