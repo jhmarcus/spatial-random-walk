@@ -63,17 +63,23 @@ class GenotypeSimulator(object):
         number of snps
     """
     def __init__(self, hab, sim_path, chrom_length=1, mu=1e-3,
-                 n_samp=10, n_rep=5e3, eps=.05):
+                 n_samp=10, n_rep=1e4, eps=.05):
+
         # habitat object
         self.hab = hab
+
         # choromosome length
         self.chrom_length = chrom_length
+
         # mutation rate
         self.mu = mu
+
         # number of haploids per deme
         self.n_samp = n_samp
+
         # number of indepdent chunks to simulate
         self.n_rep = n_rep
+
         # min derived allele frequency to filter out
         self.eps = eps
 
@@ -94,6 +100,7 @@ class GenotypeSimulator(object):
 
         # node ids for each individual
         self.v = np.repeat(self.hab.v, int(self.n / self.hab.d)).T
+
         # spatial positions for each individual
         self.s = np.vstack([np.repeat(self.hab.s[:,0], int(self.n / self.hab.d)),
                             np.repeat(self.hab.s[:,1], int(self.n / self.hab.d))]).T
@@ -157,6 +164,7 @@ class GenotypeSimulator(object):
         """
         # mean frequencies for each snp
         mu = np.mean(self.y, axis=0)
+
         # array of genetic distances
         d_gen = squareform(pdist((self.y - mu), metric='seuclidean')) / self.p
         return(d_gen)
@@ -217,7 +225,7 @@ class GenotypeSimulator(object):
     def node_to_obs_mat(self, x, n, v):
         """Converts node level array to data level array
 
-        Argument:
+        Arguments:
             x : array
                 array at the level of nodes
             n : int

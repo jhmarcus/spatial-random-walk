@@ -31,10 +31,13 @@ class Habitat(object):
     def __init__(self):
         # graph object
         self.g = None
+
         # number of nodes in the graph
         self.d = None
+
         # migration matrix storing non-negative edge weights
         self.m = None
+
         # d x 2 matrix of spatial positions
         self.s = None
 
@@ -68,8 +71,10 @@ class Habitat(object):
         """
         # invert the graph lapl ... pinvh assumes q is symmetric and psd
         q_inv = pinvh(q)
+
         # compute the random walk dist
         r = self._cov_to_dist(q_inv)
+
         return(r)
 
     def geo_dist(self):
@@ -132,8 +137,10 @@ class Habitat(object):
         """
         # extract edge weights
         weights = [self.g[i][j]['m'] for i,j in self.g.edges() if self.g[i][j]['m'] != 0.0]
+
         # extract non-zero edges
         edges = [(i,j) for i,j in self.g.edges() if self.g[i][j]['m'] != 0.0]
+
         # draw the habitat
         nx.draw(self.g, pos=self.pos_dict, node_size=node_size,
                 node_color=(self.s[:,0]**2 + (np.sqrt(self.d) / 2) * self.s[:,1]),
@@ -191,22 +198,31 @@ class TriangularLattice(Habitat):
     def __init__(self, r, c):
         # inherits from Habitat
         super().__init__()
+
         # number of rows
         self.r = r
+
         # number of cols
         self.c = c
+
         # number of nodes
         self.d = self.r * self.c
+
         # create the graph
         self.g = nx.generators.lattice.triangular_lattice_graph(r - 1, 2 * c - 2, with_positions=True)
+
         # make node ids ints
         self.g = nx.convert_node_labels_to_integers(self.g)
+
         # convert to directed graph
         self.g = self.g.to_directed()
+
         # dictionary of positions
         self.pos_dict = nx.get_node_attributes(self.g, "pos")
+
         # array of node ids
         self.v = np.array(list(self.g.nodes()))
+
         # array of spatial positions
         self.s = np.array(list(self.pos_dict.values()))
 
@@ -236,18 +252,26 @@ class Circle(Habitat):
         d x 2 array of spatial positions
     """
     def __init__(self, d):
+
         super().__init__()
+        
         # number of nodes
         self.d = d
+
         # create the graph
         self.g = nx.cycle_graph(d)
+
         # make node ids ints
         self.g = nx.convert_node_labels_to_integers(self.g)
+
         # convert to directed graph
         self.g = self.g.to_directed()
+
         # dictionary of positions
         self.pos_dict = nx.circular_layout(self.g)
+
         # array of node ids
         self.v = np.array(list(self.g.nodes()))
+
         # array of spatial positions
         self.s = np.array(list(self.pos_dict.values()))
