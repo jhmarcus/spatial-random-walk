@@ -226,6 +226,72 @@ class TriangularLattice(Habitat):
         # array of spatial positions
         self.s = np.array(list(self.pos_dict.values()))
 
+class SquareLattice(Habitat):
+    """Class for a habitat that is a square latttice
+
+    Arguments
+    ---------
+    r: int
+        number of rows in the latttice
+    c: int
+        number of columns in the lattice
+
+    Attributes
+    ----------
+    g : nx directed graph
+        directed graph object storing the Habitat
+    d : int
+        number of nodes in the graph
+    m : array
+        d x d matrix storing the migration
+        rates
+    r : int
+        number of rows in the latttice
+    c : int
+        number of columns in the lattice
+    pos_dict : dict
+        dictionary of spatial positions
+    v : array
+        array of node ids
+    s : array
+        d x 2 array of spatial positions
+    """
+    def __init__(self, r, c):
+
+        # inherits from Habitat
+        super().__init__()
+
+        # number of rows
+        self.r = r
+
+        # number of cols
+        self.c = c
+
+        # number of nodes
+        self.d = self.r * self.c
+
+        # create the graph
+        self.g = nx.grid_2d_graph(self.r, self.c)
+
+        # dictionary of positions
+        self.pos_dict = {}
+        for i,node in enumerate(self.g.nodes):
+            self.g.nodes[node]["pos"] = node
+            self.pos_dict[i] = node
+
+        #nx.set_node_attributes(self.g, "pos", self.pos_dict)
+
+        # make node ids ints
+        self.g = nx.convert_node_labels_to_integers(self.g)
+
+        # convert to directed graph
+        self.g = self.g.to_directed()
+
+        # array of node ids
+        self.v = np.array(list(self.g.nodes()))
+
+        # array of spatial positions
+        self.s = np.array(list(self.pos_dict.values()))
 
 class Circle(Habitat):
     """Class for a habitat that is a cirlce
@@ -254,7 +320,7 @@ class Circle(Habitat):
     def __init__(self, d):
 
         super().__init__()
-        
+
         # number of nodes
         self.d = d
 
