@@ -6,6 +6,8 @@ import networkx as nx
 import numpy as np
 
 from scipy.linalg import pinvh
+from scipy.sparse.linalg import cg
+from scipy.sparse import csr_matrix
 from scipy.spatial.distance import pdist, squareform
 
 import matplotlib.pyplot as plt
@@ -52,7 +54,7 @@ class Habitat(object):
         a d x d matrix where L = D - M
         """
         # diagonal matrix storing node degree
-        d = np.diag(self.m.sum(axis=1))
+        d = np.diag(self.m.sum(axis=0))
         self.l = d - self.m
 
     def rw_dist(self, q):
@@ -93,22 +95,73 @@ class Habitat(object):
         r = squareform(pdist(self.s, metric="seuclidean")) / 2
         return(r)
 
-    def coal_dist(self, m):
+    def coal_dist(self, tol=1e-8):
         """Computes expected genetic distance between nodes
         on the graph defined by the habitat under a coalescent
         stepping stone model for migration with constant population
         sizes
 
         Arguments:
-            m : array
-                d x d array of migration rates (edge weights)
-
+            tol : float
+                tolerence for solving linear system using conjugate gradient
         Returns:
-            r : array
+            t : array
                 d x d of expected genetic distances between each
                 node
         """
-        pass
+        # upper tri indicies including diagonal
+        triu_idx = np.triu_indices(self.d, 0)
+
+        # number of within deme equations and between deme equations
+        n_wb = triu_idx[0].shape[0]
+
+        # d x d matrix storing indicies of each pair
+        h = np.zeros((self.d, self.d), dtype=np.int64)
+        k = 0
+        for i in range(self.d):
+            for j in range(i, self.d):
+                h[i, j] = k
+                h[j, i] = k
+                k += 1
+
+        # coefficents of coal time equation
+        A = np.zeros((n_wb, n_wb))
+
+        # solution to coal time equation
+        b = np.ones(n_wb)
+
+        # loop of all unique pairs of demes
+        for i in range(n_wb):
+
+            # deme pair for each row
+            alpha, beta = (triu_idx[0][i], triu_idx[1][i])
+
+            if alpha == beta:
+                c = h[alpha, beta]
+                A[i, c] += 1.  # add coalescent rate
+
+            # loop over neighbors of deme alpha
+            for gamma in range(self.d):
+                c = h[beta, gamma]
+                A[i, c] += self.l[alpha, gamma]
+
+            # loop over the neighbors of deme beta
+            for gamma in range(self.d):
+                c = h[alpha, gamma]
+                A[i, c] += self.l[beta, gamma]
+
+        #t = np.empty((self.d, self.d))
+        #t[triu_idx] = np.linalg.solve(A, b)
+        #t = t + t.T - np.diag(np.diag(t))
+
+        A_ = csr_matrix(A)
+
+        t_ = cg(A_, b, tol=tol)
+        t = np.empty((self.d, self.d))
+        t[triu_idx] = t_[0]
+        t = t + t.T - np.diag(np.diag(t))
+
+        return(t)
 
     def _cov_to_dist(self, sigma):
         """Converts covariance matrix to distance matrix
