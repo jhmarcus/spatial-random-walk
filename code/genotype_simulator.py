@@ -163,10 +163,15 @@ class GenotypeSimulator(object):
             pair
         """
         # mean frequencies for each snp
-        mu = np.mean(self.y, axis=0)
+        #mu = np.mean(self.y, axis=0)
+        #std = np.sqrt(mu * (1. - mu))
+        #print(std)
 
         # array of genetic distances
-        d_gen = squareform(pdist((self.y - mu), metric='seuclidean')) / self.p
+        #d_gen = squareform(pdist((self.y - mu) / std, metric='seuclidean')) / self.p
+        #d_gen = squareform(pdist((self.y - mu), metric='seuclidean')) / self.p
+        d_gen = squareform(pdist(self.y, metric='seuclidean')) / self.p
+
         return(d_gen)
 
     def pca(self):

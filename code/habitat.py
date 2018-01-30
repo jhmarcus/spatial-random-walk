@@ -346,6 +346,63 @@ class SquareLattice(Habitat):
         # array of spatial positions
         self.s = np.array(list(self.pos_dict.values()))
 
+
+class Line(Habitat):
+    """Class for a habitat that is a square latttice
+
+    Arguments
+    ---------
+    d: int
+        number of nodes in the lattice
+
+    Attributes
+    ----------
+    g : nx directed graph
+        directed graph object storing the Habitat
+    d : int
+        number of nodes in the graph
+    m : array
+        d x d matrix storing the migration
+        rates
+    pos_dict : dict
+        dictionary of spatial positions
+    v : array
+        array of node ids
+    s : array
+        d x 2 array of spatial positions
+    """
+    def __init__(self, d):
+
+        # inherits from Habitat
+        super().__init__()
+
+        # number of nodes
+        self.d = d
+
+        # create the graph
+        self.g = nx.grid_graph([self.d])
+
+        # dictionary of positions
+        self.pos_dict = {}
+        for i,node in enumerate(self.g.nodes):
+            self.g.nodes[node]["pos"] = (node, 0.)
+            self.pos_dict[i] = (node, 0.)
+
+        #nx.set_node_attributes(self.g, "pos", self.pos_dict)
+
+        # make node ids ints
+        self.g = nx.convert_node_labels_to_integers(self.g)
+
+        # convert to directed graph
+        self.g = self.g.to_directed()
+
+        # array of node ids
+        self.v = np.array(list(self.g.nodes()))
+
+        # array of spatial positions
+        self.s = np.array(list(self.pos_dict.values()))
+
+
 class Circle(Habitat):
     """Class for a habitat that is a cirlce
 

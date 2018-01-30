@@ -112,7 +112,7 @@ body {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Stochastic-differential-equations">Stochastic differential equations<a class="anchor-link" href="#Stochastic-differential-equations">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
+<h1 id="Stepping-stone-stochastic-differential-equations">Stepping stone stochastic differential equations<a class="anchor-link" href="#Stepping-stone-stochastic-differential-equations">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
 <p>Here I provide background background on a stochastic differential equation formulation of the stepping stone model.</p>
 </div>
 </div>
@@ -122,11 +122,29 @@ body {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>$$
-\frac{\partial p_i}{\partial t} = \sum_{i \neq j} m_{ij} (p_j - p_i) + \sqrt{\frac{p_i(1-p_i)}{N_e}}\gamma_i
+\frac{\partial p_i(t)}{\partial t} = \sum_{i \neq j} m_{ij} \big(p_j(t) - p_i(t)\big) + \sqrt{\frac{p_i(t)\big(1-p_i(t)\big)}{N_e}}\gamma_i
 $$</p>
-<p>In matrix notation this is</p>
+<p>where $\gamma_i \sim \mathcal{N}(0, 1)$. In matrix notation this is</p>
 <p>$$
-\frac{\partial \mathbf{p}}{\partial t} = -\mathbf{Q}^T\mathbf{p} + diag\Bigg(\sqrt{\frac{\mathbf{p} \cdot (\mathbf{1}-\mathbf{p})}{N_e}}\Bigg) \mathbf{\gamma}
+\frac{\partial \mathbf{p}(t)}{\partial t} = -\mathbf{Q}^T\mathbf{p}(t) + diag\Bigg(\sqrt{\frac{\mathbf{p}(t) \cdot \big(\mathbf{1}-\mathbf{p}(t)\big)}{N_e}}\Bigg) \mathbf{\gamma}
+$$</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now $\mathbf{\gamma} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ and $\mathbf{Q}$ is $d \times d$ graph laplacian matrix where $\mathbf{Q} = \mathbf{D} - \mathbf{M}$ and $\mathbf{D}$ is the weighted degree matrix and $\mathbf{M}$ stores the forward in time migration rates.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$
+\frac{\partial E\big(\mathbf{p}(t)\big)}{\partial t} = E\big(-\mathbf{Q}^T\mathbf{p}(t)\big) + E\Bigg\{diag\Bigg(\sqrt{\frac{\mathbf{p}(t) \cdot \big(\mathbf{1}-\mathbf{p}(t)\big)}{N_e}}\Bigg) \mathbf{\gamma}\Bigg\} = -\mathbf{Q}^T E\big(\mathbf{p}(t)\big)
 $$</p>
 </div>
 </div>
