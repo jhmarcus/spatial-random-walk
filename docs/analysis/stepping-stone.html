@@ -112,8 +112,40 @@ body {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Stepping-stone-stochastic-differential-equations">Stepping stone stochastic differential equations<a class="anchor-link" href="#Stepping-stone-stochastic-differential-equations">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
-<p>Here I provide background background on a stochastic differential equation formulation of the stepping stone model.</p>
+<h1 id="Stepping-stone-exploration">Stepping stone exploration<a class="anchor-link" href="#Stepping-stone-exploration">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
+<p>Here I explore the stepping stone model with possible approximations building off the classic results of Bodmer and Cavalli-Sforza 1967. The notes here are a bit scattered and I will clean them up later ...</p>
+<p>The forward in time migration matrix $\widetilde{\mathbf{M}}$ has the interpretation of $\tilde{m}_{ij}$ being the probability that children of parents born in deme $j$ move to deme $i$. The backwards migration matrix $\mathbf{M}$ where $m_{ij} = \frac{\tilde{m}_{ij} n_{j,t}}{\sum_{j=1}^d\tilde{m}_{ij} n_{j,t}}$ can be interpreted as the probability that a childen born in deme $i$ come from parents born in deme $j$. Thus the forward in time stepping stone model can be written as</p>
+<p>$$
+p_{i,t} = \sum_{j=1}^d m_{ij} p_{j,t-1} + \epsilon_i
+$$</p>
+<p>for simplification / convenience we can assume $\epsilon_i \sim \mathcal{N}\Bigg(0, \frac{\sum_{j=1}^d m_{ij} p_{j,t-1} \big(1 - \sum_{j=1}^d m_{ij} p_{j,t-1}\big)}{N_i}\Bigg)$ or in matrix notation</p>
+<p>$$
+\mathbf{p}_t = \mathbf{M}\mathbf{p}_{t-1} + \epsilon
+$$</p>
+<p>where $\epsilon \sim \mathcal{N}\Big(\mathbf{0}, diag\big(\frac{1}{\mathbf{N}} \odot \mathbf{M}\mathbf{p}_{t-1} \odot (\mathbf{1} - \mathbf{M}\mathbf{p}_{t-1})\big)\Big)$</p>
+<p>Because in many applications $N_i &gt;&gt; \sum_{j=1}^d m_{ij} p_{j,t-1}$ we approximate the variance in allele frequency induced by drift simply as</p>
+<p>$$
+\epsilon \sim \mathcal{N}\Big(\mathbf{0}, \sigma^2diag\big(\frac{1}{\mathbf{N}}\big)\Big)
+$$</p>
+<p>This implies that</p>
+<p>$$
+\mathbf{p}_{t} | \mathbf{M}, \mathbf{N}, \mathbf{p}_{t-1} \sim \mathcal{N}\Big(\mathbf{M}\mathbf{p}_{t-1}, \sigma^2diag\big(\frac{1}{\mathbf{N}}\big)\Big)
+$$</p>
+<p>The marginal distribution of $\mathbf{p}_t$ can be found</p>
+<p>$$
+E(\mathbf{p}_t) = E\big(E(\mathbf{p}_t| \mathbf{p}_{t-1})\big) = \mathbf{M}E(\mathbf{p}_{t-1}) = \mathbf{M}^t\mathbf{p}_0
+$$</p>
+<p>$$
+\begin{aligned}
+Var(\mathbf{p}_t) &amp;= E\big(Var(\mathbf{p}_t| \mathbf{p}_{t-1})\big) + Var\big(E(\mathbf{p}_t| \mathbf{p}_{t-1})\big)  \\
+&amp;= \sigma^2diag\big(\frac{1}{\mathbf{N}}\big) + \mathbf{M}\Big(\sigma^2diag\big(\frac{1}{\mathbf{N}}\big)\Big)\mathbf{M}^T
+\end{aligned}
+$$</p>
+<p>Letting $\mathbf{Q} = diag\big(\frac{1}{\mathbf{N}}\big)$</p>
+<p>$$
+\mathbf{p}_t | \mathbf{M}, \mathbf{N}, \mathbf{p}_0, \sigma^2 \sim \mathcal{N}\Bigg(\mathbf{M}^t\mathbf{p}_0, \sigma^2\Big(\mathbf{Q} + \mathbf{M}\mathbf{Q}\mathbf{M}^T\Big)
+\Bigg)
+$$</p>
 </div>
 </div>
 </div>
@@ -121,19 +153,18 @@ body {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$$
-\frac{\partial p_i(t)}{\partial t} = \sum_{i \neq j} m_{ij} \big(p_j(t) - p_i(t)\big) + \sqrt{\frac{p_i(t)\big(1-p_i(t)\big)}{N_e}}\gamma_i
-$$</p>
-<p>where $\gamma_i \sim \mathcal{N}(0, 1)$ and $\gamma^T\mathbf{1} = 0$. In matrix notation this is</p>
-<p>$$
-\frac{\partial \mathbf{p}(t)}{\partial t} = -\mathbf{L}^T\mathbf{p}(t) + diag\Bigg(\sqrt{\frac{\mathbf{p}(t) \cdot \big(\mathbf{1}-\mathbf{p}(t)\big)}{N_e}}\Bigg) \mathbf{\gamma}
-$$</p>
-<p>Now $\mathbf{\gamma} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ and $\mathbf{L}$ is $d \times d$ graph laplacian matrix where $\mathbf{L} = \mathbf{D} - \mathbf{M}$ where $\mathbf{M}$ stores the forward in time migration rates and $\mathbf{D}$ is a diagonal matrix storing $d_{ii} = \sum_{k} = m_{ik}$. The stationary distribution of $\mathbf{p}(t)$ can be found be letting $\frac{\partial \mathbf{p}(t)}{\partial t} = \mathbf{0}$.</p>
+<p>To build intuiton lets consider the difference equation</p>
 <p>$$
 \begin{aligned}
-\mathbf{0} &amp;= -\mathbf{L}^T \pi + diag\Bigg(\sqrt{\frac{\pi \cdot \big(\mathbf{1}-\pi\big)}{N_e}}\Bigg) \mathbf{\gamma} \\
-\mathbf{L}^T \pi &amp;= diag\Bigg(\sqrt{\frac{\pi \cdot \big(\mathbf{1}-\pi\big)}{N_e}}\Bigg) \mathbf{\gamma} \\
-\pi &amp;= (\mathbf{L}^T)^{-1}diag\Bigg(\sqrt{\frac{\pi \cdot \big(\mathbf{1}-\pi\big)}{N_e}}\Bigg) \mathbf{\gamma}
+\mathbf{p}_{t} - \mathbf{p}_{t-1} &amp;= \mathbf{M}\mathbf{p}_{t-1} - \mathbf{p}_{t-1} + \epsilon \\
+&amp;= (\mathbf{M} - \mathbf{I})\mathbf{p}_{t-1} + \epsilon
+\end{aligned}
+$$</p>
+<p>Because the migration matrix is considered to be a stochastic matrix whose rows sum to 1 we can define graph laplacian as $\mathbf{L} = \mathbf{I} - \mathbf{M}$ and as such</p>
+<p>$$
+\begin{aligned}
+\dots \\
+&amp;= -\mathbf{L}\mathbf{p}_{t-1} + \epsilon
 \end{aligned}
 $$</p>
 </div>
