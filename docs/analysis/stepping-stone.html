@@ -133,7 +133,7 @@ $$</p>
 $$</p>
 <p>The marginal distribution of $\mathbf{p}_t$ can be found</p>
 <p>$$
-E(\mathbf{p}_t) = E\big(E(\mathbf{p}_t| \mathbf{p}_{t-1})\big) = \mathbf{M}E(\mathbf{p}_{t-1}) = \mathbf{M}^t\mathbf{p}_0
+E(\mathbf{p}_t) = E\big(E(\mathbf{p}_t| \mathbf{p}_{t-1})\big) = \mathbf{M}E(\mathbf{p}_{t-1}) = \dots = \mathbf{M}^t\mathbf{p}_0
 $$</p>
 <p>$$
 \begin{aligned}
@@ -147,11 +147,19 @@ $$</p>
 \mathbf{p}_t | \mathbf{M}, \mathbf{N}, \mathbf{p}_0, \sigma^2 \sim \mathcal{N}\Bigg(\mathbf{M}^t\mathbf{p}_0, \sigma^2\Big(\mathbf{Q} + \mathbf{M}\mathbf{Q}\mathbf{M}^T\Big)
 \Bigg)
 $$</p>
-<p>In the simplest case lets assume all demes have the same population size $N$</p>
+<p>In the simplest case lets assume all demes have the same population size $N$ and migration rates are symmetric</p>
 <p>$$
-\mathbf{p}_t | \mathbf{M}, \mathbf{N}, \mathbf{p}_0, \sigma^2 \sim \mathcal{N}\Bigg(\mathbf{M}^t\mathbf{p}_0, \frac{\sigma^2}{N}\Big(\mathbf{I} + \mathbf{M}\mathbf{M}^T\Big)
+\mathbf{p}_t | \mathbf{M}, \mathbf{N}, \mathbf{p}_0, \sigma^2 \sim \mathcal{N}\Bigg(\mathbf{M}^t\mathbf{p}_0, \frac{\sigma^2}{N}\Big(\mathbf{I} + \mathbf{M}^2\Big)
 \Bigg)
 $$</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>hmm this covariance seems a bit strange</p>
 </div>
 </div>
 </div>
