@@ -114,16 +114,16 @@ body {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Stepping-stone-exploration">Stepping stone exploration<a class="anchor-link" href="#Stepping-stone-exploration">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
 <p>Here I explore the stepping stone model with possible approximations building off the classic results of Bodmer and Cavalli-Sforza 1967. The notes here are a bit scattered and I will clean them up later ...</p>
-<p>The forward in time migration matrix $\widetilde{\mathbf{M}}$ has the interpretation of $\tilde{m}_{ij}$ being the probability that children of parents born in deme $j$ move to deme $i$. The backwards migration matrix $\mathbf{M}$ where $m_{ij} = \frac{\tilde{m}_{ij} n_{j,t}}{\sum_{j=1}^d\tilde{m}_{ij} n_{j,t}}$ can be interpreted as the probability that a childen born in deme $i$ come from parents born in deme $j$. Thus the forward in time stepping stone model can be written as</p>
+<p>The forward in time migration matrix $\widetilde{\mathbf{M}}$ has the interpretation of $\tilde{m}_{ij}$ being the probability that children of parents born in deme $j$ move to deme $i$. The backwards migration matrix $\mathbf{M}$ where $m_{ij} = \frac{\tilde{m}_{ij} n_{j,t}}{\sum_{j=1}^d\tilde{m}_{ij} n_{j,t}}$ can be interpreted as the probability that a childen born in deme $i$ come from parents born in deme $j$. Note that $\sum_{k=1}^d m_{i,k} = 1$ where $d$ is the number of demes. Thus the forward in time stepping stone model can be written as</p>
 <p>$$
 p_{i,t} = \sum_{j=1}^d m_{ij} p_{j,t-1} + \epsilon_i
 $$</p>
-<p>for simplification / convenience we can assume $\epsilon_i \sim \mathcal{N}\Bigg(0, \frac{\sum_{j=1}^d m_{ij} p_{j,t-1} \big(1 - \sum_{j=1}^d m_{ij} p_{j,t-1}\big)}{N_i}\Bigg)$ or in matrix notation</p>
+<p>for simplification / convenience we can assume $\epsilon_i \sim \mathcal{N}\Bigg(0, \frac{\sum_{j=1}^d m_{ij} p_{j,t-1} \big(1 - \sum_{j=1}^d m_{ij} p_{j,t-1}\big)}{N_i}\Bigg)$. In matrix notation</p>
 <p>$$
 \mathbf{p}_t = \mathbf{M}\mathbf{p}_{t-1} + \epsilon
 $$</p>
 <p>where $\epsilon \sim \mathcal{N}\Big(\mathbf{0}, diag\big(\frac{1}{\mathbf{N}} \odot \mathbf{M}\mathbf{p}_{t-1} \odot (\mathbf{1} - \mathbf{M}\mathbf{p}_{t-1})\big)\Big)$</p>
-<p>Because in many applications $N_i &gt;&gt; \sum_{j=1}^d m_{ij} p_{j,t-1}$ we approximate the variance in allele frequency induced by drift simply as</p>
+<p>Because in many applications $N_i &gt;&gt; \sum_{j=1}^d m_{ij} p_{j,t-1}$ and we will assume we are working with common variants, we approximate the variance in allele frequency induced by drift simply as</p>
 <p>$$
 \epsilon \sim \mathcal{N}\Big(\mathbf{0}, \sigma^2diag\big(\frac{1}{\mathbf{N}}\big)\Big)
 $$</p>
@@ -138,34 +138,19 @@ $$</p>
 <p>$$
 \begin{aligned}
 Var(\mathbf{p}_t) &amp;= E\big(Var(\mathbf{p}_t| \mathbf{p}_{t-1})\big) + Var\big(E(\mathbf{p}_t| \mathbf{p}_{t-1})\big)  \\
-&amp;= \sigma^2diag\big(\frac{1}{\mathbf{N}}\big) + \mathbf{M}\Big(\sigma^2diag\big(\frac{1}{\mathbf{N}}\big)\Big)\mathbf{M}^T
+&amp;= E\Big(\sigma^2diag\big(\frac{1}{\mathbf{N}}\big)\Big) + Var(\mathbf{M}\mathbf{p}_{t-1}) \\
+&amp;= \sigma^2diag\big(\frac{1}{\mathbf{N}}\big) + \mathbf{M}\Big(\sigma^2diag\big(\frac{1}  {\mathbf{N}}\big)\Big)\mathbf{M}^T
 \end{aligned}
 $$</p>
-<p>Letting $\mathbf{Q} = diag\big(\frac{1}{\mathbf{N}}\big)$</p>
+<p>Interestingly we see that the mean of marginal distribution depends on time but the covariance does not. Thus perhaps we can use this simple covariance structure without assuming that the process has reached equilibrium. Letting $\mathbf{Q} = diag\big(\frac{1}{\mathbf{N}}\big)$</p>
 <p>$$
 \mathbf{p}_t | \mathbf{M}, \mathbf{N}, \mathbf{p}_0, \sigma^2 \sim \mathcal{N}\Bigg(\mathbf{M}^t\mathbf{p}_0, \sigma^2\Big(\mathbf{Q} + \mathbf{M}\mathbf{Q}\mathbf{M}^T\Big)
 \Bigg)
 $$</p>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To build intuiton lets consider the difference equation</p>
+<p>In the simplest case lets assume all demes have the same population size $N$</p>
 <p>$$
-\begin{aligned}
-\mathbf{p}_{t} - \mathbf{p}_{t-1} &amp;= \mathbf{M}\mathbf{p}_{t-1} - \mathbf{p}_{t-1} + \epsilon \\
-&amp;= (\mathbf{M} - \mathbf{I})\mathbf{p}_{t-1} + \epsilon
-\end{aligned}
-$$</p>
-<p>Because the migration matrix is considered to be a stochastic matrix whose rows sum to 1 we can define graph laplacian as $\mathbf{L} = \mathbf{I} - \mathbf{M}$ and as such</p>
-<p>$$
-\begin{aligned}
-\dots \\
-&amp;= -\mathbf{L}\mathbf{p}_{t-1} + \epsilon
-\end{aligned}
+\mathbf{p}_t | \mathbf{M}, \mathbf{N}, \mathbf{p}_0, \sigma^2 \sim \mathcal{N}\Bigg(\mathbf{M}^t\mathbf{p}_0, \frac{\sigma^2}{N}\Big(\mathbf{I} + \mathbf{M}\mathbf{M}^T\Big)
+\Bigg)
 $$</p>
 </div>
 </div>
