@@ -54,7 +54,7 @@ class Habitat(object):
         a d x d matrix where L = D - M
         """
         # diagonal matrix storing node degree
-        d = np.diag(self.m.sum(axis=0))
+        d = np.diag(self.m.sum(axis=1))
         self.l = d - self.m
 
     def rw_dist(self, q):
@@ -93,6 +93,7 @@ class Habitat(object):
                 node
         """
         r = squareform(pdist(self.s, metric="seuclidean")) / 2
+        
         return(r)
 
     def coal_dist(self, tol=1e-8):

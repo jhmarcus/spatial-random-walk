@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="ipynb_website:version" content="0.9.2" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../css/jt.css">
+<link rel="stylesheet" type="text/css" href="../css/toc2.css">
+<link href="../site_libs/jqueryui-1.11.4/jquery-ui.css">
+<link rel="stylesheet" href="../site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="../site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+<script src="../site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="../site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="../site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link rel="stylesheet"
+      href="../site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="../site_libs/highlight/highlight.js"></script>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+<script src="../js/toc2.js"></script>
+<script src="../js/docs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script>
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": {
+            preferredFont: "TeX",
+            availableFonts: ["TeX"],
+            styles: {
+                scale: 110,
+                ".MathJax_Display": {
+                    "font-size": "110%",
+                }
+            }
+        }
+    });
+</script>
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+  // mark it active
+  menuAnchor.parent().addClass('active');
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+<div class="container-fluid main-container">
+<!-- tabsets -->
+<script src="../site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+<title>Spatial random walk</title>
+<style type = "text/css">
+body {
+  padding-top: 66px;
+  padding-bottom: 40px;
+}
+</style>
+</head>
+<body>
+<div tabindex="-1" id="notebook" class="border-box-sizing">
+<div class="container" id="notebook-container">
+<!-- code folding -->
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">Spatial random walk</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+<li>
+  <a href="../license.html">License</a>
+</li>
+      </ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+   <a href="http://github.com/jhmarcus/spatial-random-walk"> source </a>
+</li>
+</ul>
+      </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Stepping-stone-exploration-1">Stepping stone exploration 1<a class="anchor-link" href="#Stepping-stone-exploration-1">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
+<p>Here I explore the stepping stone model with possible approximations building off the classic results of Bodmer and Cavalli-Sforza 1967. The notes here are a bit scattered and I will clean them up later.</p>
+<p>Consider a single bi-allelic SNP with haploid individuals carrying either the $A$ or $a$ allele dispersed throughout a habitat. The habitat is discretized and defined on a graph $\mathcal{G}$ over geographic space with $d$ nodes and a migration matrix $\mathbf{M}$ which specifies the edge weights. Note that $\mathbf{M}$ can be interpreted as a "backwards" migration matrix where $m_{ij} &gt;= 0.0$ and $\sum_{j=1}^d m_{ij} = 1$. Furthermore, $m_{ij}$ can be interpreted as the probability that an individual in node $i$ has parents from node $j$. Let $p_{i,t}$ be the allele frequency of the $A$ allele at node $i$ and time $t$, here time is discrete as well. Each generation we can describe the evolution of the allele frequency in two steps, first a deterministic migration event where individuals are swapped amongst only neighboring nodes and a drift event which is a random fluctuation in allele frequency in each node proportional to its population size.</p>
+<p>$$
+p_{i,t} = \sum_{j=1}^d m_{ij} p_{i,t-1}
+$$</p>
+<p>Or in matrix notation</p>
+<p>$$
+\mathbf{p}_t = \mathbf{M}\mathbf{p}_{t-1}
+$$</p>
+<p>For now we don't assume any distributional form for $\mathbf{p}_{t}$ but do define its conditional moments</p>
+<p>$$
+\begin{aligned}
+E\big(\mathbf{p}_t | \mathbf{p}_{t-1}\big) &amp;= \mathbf{M}\mathbf{p}_{t-1} \\
+Var\big(\mathbf{p}_t | \mathbf{p}_{t-1}\big) &amp;= diag\Big(\frac{1}{\mathbf{N}} \odot \mathbf{M}\mathbf{p}_{t-1} \odot \big(\mathbf{1} - \mathbf{M}\mathbf{p}_{t-1}\big) \Big)
+\end{aligned}
+$$</p>
+<p>Here $\mathbf{N}$ is a $d$ vector of population sizes within each node and $\odot$ refers to element-wise multiplication. Note that this exactly corresponds to the process we described previously. There is first a deterministic migration event and variance induced by random sampling of gametes due to genetic drift. Here we make the simplifying assumption where we focus only on common SNPs such that the binomial sampling variance has a small range and approximate this conditional variance as</p>
+<p>$$
+Var\big(\mathbf{p}_t | \mathbf{p}_{t-1}\big) \approx \sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big)
+$$</p>
+<p>We can then find the marginal moments of $\mathbf{p}_t$</p>
+<p>$$
+\begin{aligned}
+E(\mathbf{p}_{t}) &amp;= E\Big(E\big(\mathbf{p}_{t} | \mathbf{p}_{t-1}\big)\Big) \\
+&amp; = E\big(\mathbf{M}\mathbf{p}_{t-1}\big) \\
+&amp;= \mathbf{M}E(\mathbf{p}_{t-1}) \\
+&amp;= \dots \\
+&amp;= \mathbf{M}^t\mathbf{p}_0
+\end{aligned}
+$$</p>
+<p>$$
+\begin{aligned}
+Var(\mathbf{p}_t) &amp;= E\Big(Var\big(\mathbf{p}_t | \mathbf{p}_{t-1}\big)\Big) +  Var\Big(E\big(\mathbf{p}_{t} | \mathbf{p}_{t-1} \big)\Big) \\
+&amp;= E\Bigg(\sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big)\Bigg) + Var\big(\mathbf{M}\mathbf{p}_{t-1}\big) \\
+&amp;= \sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big) + \mathbf{M}Var(\mathbf{p}_{t-1})\mathbf{M}^T
+\end{aligned}
+$$</p>
+<p>Letting $\mathbf{Q} = \sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big)$</p>
+<p>$$
+\begin{aligned}
+\dots \\
+&amp;= \mathbf{Q} + \mathbf{M}Var(\mathbf{p}_{t-1})\mathbf{M}^T \\
+&amp;= \mathbf{Q} + \mathbf{M}\Big(\mathbf{Q} + \mathbf{M}Var(\mathbf{p}_{t-2})\mathbf{M}^T\Big)\mathbf{M}^T \\
+&amp;= \mathbf{Q} + \mathbf{M}\mathbf{Q}\mathbf{M}^T + \mathbf{M}^2 Var(\mathbf{p}_{t-2})(\mathbf{M}^2)^T \\
+&amp;= \mathbf{Q} + \mathbf{M}\mathbf{Q}\mathbf{M}^T + \mathbf{M}^2\Big(\mathbf{Q} + \mathbf{M}Var(\mathbf{p}_{t-3})\mathbf{M}^T\Big)(\mathbf{M}^2)^T \\
+&amp;= \dots \\
+&amp;= \mathbf{Q} + \mathbf{M}\mathbf{Q}\mathbf{M}^T  + \mathbf{M}^2\mathbf{Q}(\mathbf{M}^2)^T + \mathbf{M}^3\mathbf{Q}(\mathbf{M}^3)^T + \dots + \mathbf{M}^t\mathbf{Q}\mathbf{M}^t)^T \\
+&amp;= \sum_{k=0}^t \mathbf{M}^k\mathbf{Q}(\mathbf{M}^k)^T
+\end{aligned}
+$$</p>
+<p>Lets even simplify things more! Letting all population sizes be the same with size $N$ across the nodes and migration rates be symmetric</p>
+<p>$$
+Var(\mathbf{p}_t) = \frac{\sigma^2}{N}\sum_{k=0}^t \mathbf{M}^k\mathbf{I}(\mathbf{M}^k)^T = \frac{\sigma^2}{N}\sum_{k=0}^t (\mathbf{M}^2)^k
+$$</p>
+<p>Lets now let the process evolve for infinite time and see what the covariance of the limiting distribution looks like. Lettings $\pi$ be the limiting distribution of the allele frequency</p>
+<p>$$
+Var(\pi) = \frac{\sigma^2}{N}\sum_{k=0}^{\infty} (\mathbf{M}^2)^k
+$$</p>
+<p>We can recognize the sum as being a matrix analog of a geometric series and as such it converges to ...</p>
+<p>$$
+\dots \\
+= \frac{\sigma^2}{N}(\mathbf{I} - \mathbf{M}^2)^{-1}
+$$</p>
+<p>This case is pretty cool! Let the graph laplacian be $\mathbf{L} = \mathbf{D} - \mathbf{M}$ where $d_{ii} = \sum_{j=1}^d m_{ij} = 1$. Thus $\mathbf{L} = \mathbf{I} - \mathbf{M}$. So here we can think of the identity as the degree matrix and perhaps we can connect in some way the above covariance to the Hanks 2017 paper. The precision matrix makes some sense if interpreting in terms of conditional probabilities i.e. nodes not connecting in the graph with have 0 entries.</p>
+<p>Lets try to attack the more general case of the limiting covariance with varying population sizes!</p>
+<p>$$
+Var(\pi) = \sum_{k=0}^{\infty} \mathbf{M}^k\mathbf{Q}(\mathbf{M}^k)^T
+$$</p>
+<p><em>... need to figure out if it converges. Here is an attempt ...</em></p>
+<p>First, let $\mathbf{\Gamma} = \mathbf{M}^k\mathbf{Q}(\mathbf{M}^k)^T$ and $\mathbf{A} = \mathbf{M}^k$ so that $\mathbf{\Gamma} = \mathbf{A}\mathbf{Q}\mathbf{A}^T$</p>
+<p>$$
+\gamma_{ij} = \sum_{l=1}^d q_l a_{il} a_{lj}
+$$</p>
+<p>We can then find the matrix power by eigen-value decomposition $\mathbf{A} = \mathbf{M}^k = \mathbf{U}\mathbf{\Lambda}^k\mathbf{U}^T$. Note that $\mathbf{M}$ has eigenvalues there less than 1 which is a key property for the convergence of the matrix analog of a geometric series.</p>
+<p>$$
+\begin{aligned}
+a_{il} &amp;= \sum_{m=1}^d \lambda^k_m u_{im} u_{ml} \\
+a_{lj} &amp;= \sum_{n=1}^d \lambda^k_n u_{ln} u_{nj}
+\end{aligned}
+$$</p>
+<p>Substituting these back in to $\gamma_{ij}$ we get</p>
+<p>$$
+\gamma_{ij} = \sum_{l=1}^d q_l \sum_{m=1}^d \lambda^k_m u_{im} u_{ml}\sum_{n=1}^d \lambda^k_n u_{ln} u_{nj}
+$$</p>
+<p>Recall we'd like to show this series converges!</p>
+<p>$$
+\begin{aligned}
+\sum_{k=0}^{\infty} \gamma_{ij} &amp;= \sum_{k=0}^{\infty} \sum_{l=1}^d q_l \sum_{m=1}^d \lambda^k_m u_{im} u_{ml}\sum_{n=1}^d \lambda^k_n u_{ln} u_{nj} \\
+&amp;= \sum_{k=0}^{\infty} \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l \lambda^k_m u_{im} u_{ml} \lambda^k_n u_{ln} u_{nj} \\
+&amp;= \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l u_{im} u_{ml} u_{ln} u_{nj} \sum_{k=0}^{\infty} \lambda^k_n \lambda^k_m \\
+&amp;= \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l u_{im} u_{ml} u_{ln} u_{nj} \sum_{k=0}^{\infty} (\lambda_n \lambda_m)^k \\
+&amp;= \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l u_{im} u_{ml} u_{ln} u_{nj} \frac{1}{1 - \lambda_n \lambda_m} \\
+&amp;= \sum_{l=1}^d q_l \sum_{m=1}^d \sum_{n=1}^d u_{im} u_{ml} u_{ln} u_{nj} \frac{1}{1 - \lambda_n \lambda_m}
+\end{aligned}
+$$</p>
+<p>It seems like the series converges! So perhaps we can compute this covariance matrix but it would require diagonalizing $\mathbf{M}$ which is not ideal.</p>
+<p><strong>TODO: reorganize this into matrix form</strong></p>
+<p><em>Note I realized this geometric series will not converge! A stochastic matrix will have an a eigen-value that is exactly 1. The condition for the matrix analog of the geometric series is that its eigenvalues must be strictly less than 1.</em> I will keep this document around for historical reasons :). A fun diversion!</p>
+</div>
+</div>
+</div>
+<hr>
+&copy; 2017 Joseph Marcus
+</div>
+</div>
+</body>
+</html>
