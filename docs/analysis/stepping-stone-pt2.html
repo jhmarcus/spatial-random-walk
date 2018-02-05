@@ -144,7 +144,7 @@ $$</p>
 \mathbf{\pi} - \mathbf{M}\pi = \epsilon \\
 (\mathbf{I} - \mathbf{M})\pi = \epsilon
 $$</p>
-<p>Recall the graph laplacian be $\mathbf{L} = \mathbf{D} - \mathbf{M}$ where $d_{ii} = \sum_{j=1}^d m_{ij} = 1$. Because $\mathbf{M}$ is a stochastic matrix it rows sum to 1 and $\mathbf{L} = \mathbf{I} - \mathbf{M}$.</p>
+<p>Recall the graph laplacian is defined as $\mathbf{L} = \mathbf{D} - \mathbf{M}$ where $d_{ii} = \sum_{j=1}^d m_{ij} = 1$. Because $\mathbf{M}$ is a stochastic matrix it rows sum to 1 and $\mathbf{L} = \mathbf{I} - \mathbf{M}$.</p>
 <p>$$
 \mathbf{L}\mathbf{\pi} = \epsilon \\
 \pi = \mathbf{L}^{-1}\epsilon
@@ -157,8 +157,8 @@ $$</p>
 <p>$$
 \pi | \sigma^2, \mathbf{L}, N \sim \mathcal{N}\Big(\mathbf{0}, \frac{\sigma^2}{N}(\mathbf{L}\mathbf{L}^T)^{-1}\Big)
 $$</p>
-<p>This is very similar to the covariance matrix derived in Hanks 2017 ... now its a bit easier to see the some of the connections?</p>
-<p><em>TODO: show formally the stationary distribution exists ... perhaps this also needs the constraint of $\epsilon^T \mathbf{1} = 0$</em></p>
+<p>This is very similar to the covariance matrix derived in Hanks 2017 ... now its a bit easier to see the some of the connections.</p>
+<p><em>TODO: show formally the stationary distribution exists ... perhaps this also needs the constraint of $\mathbf{1}^T\epsilon = 0$</em></p>
 </div>
 </div>
 </div>

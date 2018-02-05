@@ -51,11 +51,18 @@ class Habitat(object):
 
     def get_graph_lapl(self):
         """Computes the graph laplacian which is
-        a d x d matrix where L = D - M
+        a d x d matrix where L = I - M as M is markov
+        matrix its rows sum to 1
         """
-        # diagonal matrix storing node degree
-        d = np.diag(self.m.sum(axis=1))
-        self.l = d - self.m
+        # adding diagonal to migration matrix
+        m = np.zeros((self.d, self.d))
+        diag =  1. - np.sum(self.m, axis=1)
+        diag_idx = np.diag_indices(self.d)
+
+        m = np.array(self.m.tolist())
+        m[diag_idx] = diag
+
+        self.l = np.eye(self.d) - m
 
     def rw_dist(self, q):
         """Computes a random walk distance between nodes
@@ -93,7 +100,7 @@ class Habitat(object):
                 node
         """
         r = squareform(pdist(self.s, metric="seuclidean")) / 2
-        
+
         return(r)
 
     def coal_dist(self, tol=1e-8):
@@ -178,6 +185,7 @@ class Habitat(object):
         ones = np.ones(n).reshape(n, 1)
         sigma_diag = np.diag(sigma).reshape(n, 1)
         d = ones.dot(sigma_diag.T) + sigma_diag.dot(ones.T) - (2. * sigma)
+
         return(d)
 
     def plot_habitat(self, node_size, edge_width_mult, arrows=False):

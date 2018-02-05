@@ -62,7 +62,7 @@ class GenotypeSimulator(object):
     p : int
         number of snps
     """
-    def __init__(self, hab, sim_path, chrom_length=1, mu=1e-3,
+    def __init__(self, hab, sim_path, chrom_length=1, mu=1e-3, n_e=1,
                  n_samp=10, n_rep=1e4, eps=.05):
 
         # habitat object
@@ -73,6 +73,9 @@ class GenotypeSimulator(object):
 
         # mutation rate
         self.mu = mu
+
+        # effective sizes
+        self.n_e = n_e
 
         # number of haploids per deme
         self.n_samp = n_samp
@@ -116,7 +119,8 @@ class GenotypeSimulator(object):
                                                migration_matrix=self.hab.m.tolist(),
                                                length=self.chrom_length,
                                                mutation_rate=self.mu,
-                                               num_replicates=self.n_rep)
+                                               num_replicates=self.n_rep,
+                                               Ne=self.n_e)
 
     def _simulate_genotypes(self):
         """Extract trees and simulate mutations in each
@@ -163,14 +167,8 @@ class GenotypeSimulator(object):
             pair
         """
         # mean frequencies for each snp
-        #mu = np.mean(self.y, axis=0)
-        #std = np.sqrt(mu * (1. - mu))
-        #print(std)
-
-        # array of genetic distances
-        #d_gen = squareform(pdist((self.y - mu) / std, metric='seuclidean')) / self.p
-        #d_gen = squareform(pdist((self.y - mu), metric='seuclidean')) / self.p
-        d_gen = squareform(pdist(self.y, metric='seuclidean')) / self.p
+        mu = np.mean(self.y, axis=0, keepdims=True)
+        d_gen = squareform(pdist((self.y - mu), metric='seuclidean')) / self.p
 
         return(d_gen)
 
