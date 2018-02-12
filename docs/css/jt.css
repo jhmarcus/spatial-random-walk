@@ -5238,9 +5238,9 @@ span.save_widget span.filename:hover {
 }
 /* Prevents MathJax from jittering */
 /* cell position when cell is selected */
-.MathJax:focus, body :focus .MathJax {
-    display: inline-block !important;
-}
+/*.MathJax:focus, body :focus .MathJax {
+/*    display: inline-block !important;
+/*}
 
 
 /* Overrides of notebook CSS for static HTML export */
