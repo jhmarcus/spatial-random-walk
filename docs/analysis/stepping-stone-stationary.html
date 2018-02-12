@@ -112,9 +112,16 @@ body {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Stepping-stone-exploration-1">Stepping stone exploration 1<a class="anchor-link" href="#Stepping-stone-exploration-1">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
-<p>Here I explore the stepping stone model with possible approximations building off the classic results of Bodmer and Cavalli-Sforza 1967. The notes here are a bit scattered and I will clean them up later.</p>
-<p>Consider a single bi-allelic SNP with haploid individuals carrying either the $A$ or $a$ allele dispersed throughout a habitat. The habitat is discretized and defined on a graph $\mathcal{G}$ over geographic space with $d$ nodes and a migration matrix $\mathbf{M}$ which specifies the edge weights. Note that $\mathbf{M}$ can be interpreted as a "backwards" migration matrix where $m_{ij} &gt;= 0.0$ and $\sum_{j=1}^d m_{ij} = 1$. Furthermore, $m_{ij}$ can be interpreted as the probability that an individual in node $i$ has parents from node $j$. Let $p_{i,t}$ be the allele frequency of the $A$ allele at node $i$ and time $t$, here time is discrete as well. Each generation we can describe the evolution of the allele frequency in two steps, first a deterministic migration event where individuals are swapped amongst only neighboring nodes and a drift event which is a random fluctuation in allele frequency in each node proportional to its population size.</p>
+<h1 id="Stationarity-distribution-of-the-discrete-time-stepping-stone-model">Stationarity distribution of the discrete time stepping stone model<a class="anchor-link" href="#Stationarity-distribution-of-the-discrete-time-stepping-stone-model">&#182;</a></h1><p><strong>authors:</strong> Joseph Marcus</p>
+<p>Here I explore the stepping stone model with possible approximations building off the classic results of Bodmer and Cavalli-Sforza 1967. I essentially find there is no clean analytical form for the covariance matrix of the stationary distribution of this process.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Discrete-time-stepping-stone">Discrete time stepping stone<a class="anchor-link" href="#Discrete-time-stepping-stone">&#182;</a></h2><p>Consider a single bi-allelic SNP with haploid individuals carrying either the $A$ or $a$ allele dispersed throughout a habitat. The habitat is discretized and defined on a graph $\mathcal{G}$ over geographic space with $d$ nodes and a migration matrix $\mathbf{M}$ which specifies the edge weights. Note that $\mathbf{M}$ can be interpreted as a "backwards" migration matrix where $m_{ij} &gt;= 0.0$ and $\sum_{j=1}^d m_{ij} = 1$. Furthermore, $m_{ij}$ can be interpreted as the probability that an individual in node $i$ has parents from node $j$. Let $p_{i,t}$ be the allele frequency of the $A$ allele at node $i$ and time $t$, here time is discrete as well. Each generation we can describe the evolution of the allele frequency in two steps, first a deterministic migration event where individuals are swapped amongst only neighboring nodes and a drift event which is a random fluctuation in allele frequency in each node proportional to its population size.</p>
 <p>$$
 p_{i,t} = \sum_{j=1}^d m_{ij} p_{i,t-1}
 $$</p>
@@ -133,24 +140,47 @@ $$</p>
 <p>$$
 Var\big(\mathbf{p}_t | \mathbf{p}_{t-1}\big) \approx \sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big)
 $$</p>
-<p>We can then find the marginal moments of $\mathbf{p}_t$</p>
+<p>Now lets make a further assumption that the change in frequency due to drift are normally distributed</p>
 <p>$$
-\begin{aligned}
-E(\mathbf{p}_{t}) &amp;= E\Big(E\big(\mathbf{p}_{t} | \mathbf{p}_{t-1}\big)\Big) \\
-&amp; = E\big(\mathbf{M}\mathbf{p}_{t-1}\big) \\
-&amp;= \mathbf{M}E(\mathbf{p}_{t-1}) \\
-&amp;= \dots \\
-&amp;= \mathbf{M}^t\mathbf{p}_0
-\end{aligned}
+\mathbf{p}_t = \mathbf{M}\mathbf{p}_{t-1} + \epsilon \\ 
+\epsilon | \sigma^2, \mathbf{N} \sim \mathcal{N}\Bigg(\mathbf{0}, \sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big)\Bigg) 
 $$</p>
+<p>For notational simplicity let $\mathbf{Q} = \sigma^2diag\Big(\frac{1}{\mathbf{N}}\Big)$</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Stationary-distribution">Stationary distribution<a class="anchor-link" href="#Stationary-distribution">&#182;</a></h2><p>Let $\pi(.)$ be the stationary distribution of this process and $\mathbf{p}^{(s)}$ be a draw from the stationary distribution $\mathbf{p}^{(s)} \sim \pi(.)$. It might be reasonable to assume that $\mathbf{p}^{(s)} \sim \mathcal{N}\big(\mu, \mathbf{\Sigma}\big)$. Then the distribution of $\mathbf{M}\mathbf{p}^{(s)} + \epsilon$ will have covariance matrix $\mathbf{\Sigma}$ because we are at stationarity, resulting in ...</p>
+<p>$$
+\mathbf{\Sigma} = \mathbf{M}\mathbf{\Sigma}\mathbf{M}^T + \mathbf{Q}
+$$</p>
+<p>Interestingly, this is known as the discrete time <a href="https://en.wikipedia.org/wiki/Lyapunov_equation">Lyapunov equation</a> and has a limiting solution (under certain conditions for $\mathbf{M}$)</p>
+<p>$$
+\mathbf{\Sigma} = \sum_{k=0}^{\infty} \mathbf{M}^K\mathbf{Q}(\mathbf{M}^k)^T
+$$</p>
+<p>the Lyapunov equation has a more intuitive interpretation if we take a different approach in finding the stationary covariance $\Rightarrow$</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Limiting-distribution">Limiting distribution<a class="anchor-link" href="#Limiting-distribution">&#182;</a></h2><p>Recall that</p>
+<p>$$
+Var\big(\mathbf{p}_t | \mathbf{p}_{t-1}\big) \approx \mathbf{Q}
+$$</p>
+<p>Lets find the marginal covariance of the allele frequency at time $t$ by the law of total variance</p>
 <p>$$
 \begin{aligned}
 Var(\mathbf{p}_t) &amp;= E\Big(Var\big(\mathbf{p}_t | \mathbf{p}_{t-1}\big)\Big) +  Var\Big(E\big(\mathbf{p}_{t} | \mathbf{p}_{t-1} \big)\Big) \\
-&amp;= E\Bigg(\sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big)\Bigg) + Var\big(\mathbf{M}\mathbf{p}_{t-1}\big) \\
-&amp;= \sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big) + \mathbf{M}Var(\mathbf{p}_{t-1})\mathbf{M}^T
+&amp;= E\big(\mathbf{Q}\big) + Var\big(\mathbf{M}\mathbf{p}_{t-1}\big) \\
+&amp;= \mathbf{Q} + \mathbf{M}Var(\mathbf{p}_{t-1})\mathbf{M}^T
 \end{aligned}
 $$</p>
-<p>Letting $\mathbf{Q} = \sigma^2 diag\Big(\frac{1}{\mathbf{N}}\Big)$</p>
 <p>$$
 \begin{aligned}
 \dots \\
@@ -163,54 +193,11 @@ $$</p>
 &amp;= \sum_{k=0}^t \mathbf{M}^k\mathbf{Q}(\mathbf{M}^k)^T
 \end{aligned}
 $$</p>
-<p>Lets even simplify things more! Letting all population sizes be the same with size $N$ across the nodes and migration rates be symmetric</p>
+<p>If now let the process evolve for infinite time and we recognize the solution to the Lyapunov equation</p>
 <p>$$
-Var(\mathbf{p}_t) = \frac{\sigma^2}{N}\sum_{k=0}^t \mathbf{M}^k\mathbf{I}(\mathbf{M}^k)^T = \frac{\sigma^2}{N}\sum_{k=0}^t (\mathbf{M}^2)^k
+Var\big(\mathbf{p}^{(s)}\big) = \sum_{k=0}^{\infty} \mathbf{M}^K\mathbf{Q}(\mathbf{M}^k)^T
 $$</p>
-<p>Lets now let the process evolve for infinite time and see what the covariance of the limiting distribution looks like. Lettings $\pi$ be the limiting distribution of the allele frequency</p>
-<p>$$
-Var(\pi) = \frac{\sigma^2}{N}\sum_{k=0}^{\infty} (\mathbf{M}^2)^k
-$$</p>
-<p>We can recognize the sum as being a matrix analog of a geometric series and as such it converges to ...</p>
-<p>$$
-\dots \\
-= \frac{\sigma^2}{N}(\mathbf{I} - \mathbf{M}^2)^{-1}
-$$</p>
-<p>This case is pretty cool! Let the graph laplacian be $\mathbf{L} = \mathbf{D} - \mathbf{M}$ where $d_{ii} = \sum_{j=1}^d m_{ij} = 1$. Thus $\mathbf{L} = \mathbf{I} - \mathbf{M}$. So here we can think of the identity as the degree matrix and perhaps we can connect in some way the above covariance to the Hanks 2017 paper. The precision matrix makes some sense if interpreting in terms of conditional probabilities i.e. nodes not connecting in the graph with have 0 entries.</p>
-<p>Lets try to attack the more general case of the limiting covariance with varying population sizes!</p>
-<p>$$
-Var(\pi) = \sum_{k=0}^{\infty} \mathbf{M}^k\mathbf{Q}(\mathbf{M}^k)^T
-$$</p>
-<p><em>... need to figure out if it converges. Here is an attempt ...</em></p>
-<p>First, let $\mathbf{\Gamma} = \mathbf{M}^k\mathbf{Q}(\mathbf{M}^k)^T$ and $\mathbf{A} = \mathbf{M}^k$ so that $\mathbf{\Gamma} = \mathbf{A}\mathbf{Q}\mathbf{A}^T$</p>
-<p>$$
-\gamma_{ij} = \sum_{l=1}^d q_l a_{il} a_{lj}
-$$</p>
-<p>We can then find the matrix power by eigen-value decomposition $\mathbf{A} = \mathbf{M}^k = \mathbf{U}\mathbf{\Lambda}^k\mathbf{U}^T$. Note that $\mathbf{M}$ has eigenvalues there less than 1 which is a key property for the convergence of the matrix analog of a geometric series.</p>
-<p>$$
-\begin{aligned}
-a_{il} &amp;= \sum_{m=1}^d \lambda^k_m u_{im} u_{ml} \\
-a_{lj} &amp;= \sum_{n=1}^d \lambda^k_n u_{ln} u_{nj}
-\end{aligned}
-$$</p>
-<p>Substituting these back in to $\gamma_{ij}$ we get</p>
-<p>$$
-\gamma_{ij} = \sum_{l=1}^d q_l \sum_{m=1}^d \lambda^k_m u_{im} u_{ml}\sum_{n=1}^d \lambda^k_n u_{ln} u_{nj}
-$$</p>
-<p>Recall we'd like to show this series converges!</p>
-<p>$$
-\begin{aligned}
-\sum_{k=0}^{\infty} \gamma_{ij} &amp;= \sum_{k=0}^{\infty} \sum_{l=1}^d q_l \sum_{m=1}^d \lambda^k_m u_{im} u_{ml}\sum_{n=1}^d \lambda^k_n u_{ln} u_{nj} \\
-&amp;= \sum_{k=0}^{\infty} \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l \lambda^k_m u_{im} u_{ml} \lambda^k_n u_{ln} u_{nj} \\
-&amp;= \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l u_{im} u_{ml} u_{ln} u_{nj} \sum_{k=0}^{\infty} \lambda^k_n \lambda^k_m \\
-&amp;= \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l u_{im} u_{ml} u_{ln} u_{nj} \sum_{k=0}^{\infty} (\lambda_n \lambda_m)^k \\
-&amp;= \sum_{l=1}^d \sum_{m=1}^d \sum_{n=1}^d q_l u_{im} u_{ml} u_{ln} u_{nj} \frac{1}{1 - \lambda_n \lambda_m} \\
-&amp;= \sum_{l=1}^d q_l \sum_{m=1}^d \sum_{n=1}^d u_{im} u_{ml} u_{ln} u_{nj} \frac{1}{1 - \lambda_n \lambda_m}
-\end{aligned}
-$$</p>
-<p>It seems like the series converges! So perhaps we can compute this covariance matrix but it would require diagonalizing $\mathbf{M}$ which is not ideal.</p>
-<p><strong>TODO: reorganize this into matrix form</strong></p>
-<p><em>Note I realized this geometric series will not converge! A stochastic matrix will have an a eigen-value that is exactly 1. The condition for the matrix analog of the geometric series is that its eigenvalues must be strictly less than 1.</em> I will keep this document around for historical reasons :). A fun diversion!</p>
+<p>The convergence properties of this infinite sum requires that $|\lambda_i| &lt; 1 \ \forall \ i$ where $\lambda_i$ is an eigen-value of $\mathbf{M}$. Me know that $\mathbf{M}$ is stochastic matrix and as such has an eigen-value that is exactly 1 thus there doesn't seem a tractable analytical form for the stationarity covariance of this process.</p>
 </div>
 </div>
 </div>
